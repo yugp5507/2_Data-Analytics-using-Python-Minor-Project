@@ -27,6 +27,9 @@ The main goal of this project is to:
 - [Common Issues & Fixes](#-common-issues--fixes)
 - [Tech Stack](#-tech-stack)
 - [Analysis Workflow](#-analysis-workflow)
+- [Student Result & Performance Predictor](#-student-result--performance-predictor-predictpy)
+- [Installation & Running predict.py](#-installation--running-predictpy-detailed-guide)
+- [Maintenance Guide](#-maintenance-guide)
 - [Author](#-author)
 - [Support](#-support)
 
@@ -569,7 +572,301 @@ if st.button("🚀 Generate Result & Predict", use_container_width=True):
 
 ---
 
-## 👨‍💻 Author
+## �️ Installation & Running predict.py (Detailed Guide)
+
+### Step 1: Install Streamlit
+
+Open your terminal and install Streamlit:
+
+```bash
+pip install streamlit
+```
+
+**Verify Installation:**
+```bash
+streamlit --version
+```
+
+### Step 2: Install Additional Dependencies
+
+Ensure all required libraries are installed:
+
+```bash
+pip install pandas joblib reportlab scikit-learn
+```
+
+Or install from requirements.txt:
+
+```bash
+pip install -r requirements.txt
+```
+
+### Step 3: Verify Model Files Exist
+
+Before running the app, check that model files exist in the `models/` directory:
+
+```bash
+# Windows
+dir models\
+
+# Mac/Linux
+ls models/
+```
+
+**Required files:**
+- `kmeans_model.pkl` – K-means clustering model
+- `scaler.pkl` – StandardScaler for feature normalization
+
+✅ If both files exist, you're ready to run!
+
+### Step 4: Run the Streamlit Application
+
+Navigate to the project directory and run:
+
+```bash
+# Option 1: Run directly from src folder
+cd src
+streamlit run predict.py
+
+# Option 2: Run from project root
+streamlit run src/predict.py
+```
+
+### Step 5: Access the Application
+
+The application will automatically open in your browser at:
+
+```
+http://localhost:8501
+```
+
+**If it doesn't open automatically:**
+- Open your browser
+- Paste: `http://localhost:8501`
+
+---
+
+### 🎯 Quick Start Commands
+
+**Single command to run everything:**
+
+```bash
+# Windows
+cd src && streamlit run predict.py
+
+# Mac/Linux
+cd src && streamlit run predict.py
+```
+
+**Stop the application:**
+- Press `Ctrl + C` in the terminal
+
+---
+
+## 🔧 Maintenance Guide
+
+### Regular Maintenance Tasks
+
+#### 1. **Update Dependencies**
+
+Check for package updates:
+
+```bash
+pip list --outdated
+```
+
+Update specific packages:
+
+```bash
+pip install --upgrade streamlit pandas scikit-learn
+```
+
+Update all packages:
+
+```bash
+pip install --upgrade -r requirements.txt
+```
+
+#### 2. **Clear Streamlit Cache**
+
+If models are loading incorrectly, clear the cache:
+
+```bash
+# Windows
+rmdir /s %APPDATA%\streamlit\*.
+
+# Mac/Linux
+rm -rf ~/.streamlit/
+```
+
+#### 3. **Verify Model Integrity**
+
+Check if model files are corrupted:
+
+```python
+import joblib
+
+try:
+    kmeans = joblib.load("models/kmeans_model.pkl")
+    scaler = joblib.load("models/scaler.pkl")
+    print("✅ Models loaded successfully")
+except Exception as e:
+    print(f"❌ Error loading models: {e}")
+```
+
+#### 4. **Monitor Application Performance**
+
+Enable debug mode for troubleshooting:
+
+```bash
+streamlit run predict.py --logger.level=debug
+```
+
+---
+
+### Common Maintenance Issues & Solutions
+
+#### Issue 1: "ModuleNotFoundError: No module named 'streamlit'"
+
+**Solution:**
+```bash
+pip install streamlit
+```
+
+#### Issue 2: "FileNotFoundError: models/kmeans_model.pkl"
+
+**Solution:**
+- Verify models folder exists in the project root
+- Check file paths in predict.py (line 18-19)
+- Ensure you're running from the correct directory
+
+#### Issue 3: "Port 8501 already in use"
+
+**Solution - Use a different port:**
+```bash
+streamlit run predict.py --server.port 8502
+```
+
+#### Issue 4: Slow Application Loading
+
+**Solution - Increase cache settings:**
+
+Edit predict.py and modify:
+```python
+@st.cache_resource
+def load_models():  # Models cache across sessions
+```
+
+#### Issue 5: PDF Generation Issues
+
+**Solution - Install ReportLab properly:**
+```bash
+pip install --upgrade reportlab
+```
+
+---
+
+### 📋 Monthly Maintenance Checklist
+
+- [ ] Update all packages: `pip install --upgrade -r requirements.txt`
+- [ ] Test model predictions with sample data
+- [ ] Verify PDF generation works correctly
+- [ ] Check for any error messages in terminal
+- [ ] Review code for deprecated functions
+- [ ] Backup current models in a separate folder
+- [ ] Test on different Python versions if possible
+
+---
+
+### 🔐 Backup & Recovery
+
+**Create a backup of models:**
+
+```bash
+# Create backup folder
+mkdir models_backup
+
+# Copy models
+copy models\*.pkl models_backup\  (Windows)
+cp models/*.pkl models_backup/    (Mac/Linux)
+```
+
+**Restore from backup:**
+
+```bash
+# Copy back
+copy models_backup\*.pkl models\  (Windows)
+cp models_backup/*.pkl models/    (Mac/Linux)
+```
+
+---
+
+### 📊 Performance Optimization
+
+#### 1. **Reduce CSS Styling Size**
+
+Minimize HTML in predict.py for faster rendering
+
+#### 2. **Cache Model Loading**
+
+The `@st.cache_resource` decorator already optimizes this
+
+#### 3. **Optimize DataFrame Operations**
+
+Use vectorized operations instead of loops
+
+#### 4. **Monitor Memory Usage**
+
+```bash
+streamlit run predict.py --client.maxMessageSize=50
+```
+
+---
+
+### 🐛 Debugging Tips
+
+**Enable verbose logging:**
+```bash
+streamlit run predict.py --logger.level=debug
+```
+
+**Check Python version:**
+```bash
+python --version
+```
+
+**Verify all imports work:**
+```bash
+python -c "import streamlit; import pandas; import joblib; import reportlab; print('✅ All imports working')"
+```
+
+**Test the app locally:**
+```bash
+streamlit run predict.py --client.showErrorDetails=true
+```
+
+---
+
+### 🚀 Deployment Considerations
+
+Before deploying to production:
+
+1. **Test with different datasets** – Verify model accuracy
+2. **Check file permissions** – Ensure read/write access for PDF generation
+3. **Monitor resource usage** – Check CPU and memory usage
+4. **Update Streamlit configuration** – Set production settings:
+
+```bash
+# Increase client timeout
+streamlit run predict.py --client.toolbarMode=minimal
+```
+
+5. **Secure sensitive data** – Don't expose model internals
+6. **Version control models** – Keep track of model versions
+
+---
+
+```
 
 **Yug Patel**  
 GitHub: https://github.com/yugp5507
