@@ -179,7 +179,7 @@ if st.button("🚀 Generate Result & Predict", use_container_width=True):
     <h3>Result: {result_status}</h3>
     <h3>Performance: {performance}</h3>
     </div>
-    <br></br>
+    <br>
     """
 
     st.markdown(html, unsafe_allow_html=True)
