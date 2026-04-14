@@ -46,7 +46,7 @@ def generate_pdf(data, filename="result.pdf"):
     elements.append(table)
     elements.append(Spacer(1, 10))
 
-    elements.append(Paragraph(f"Total Marks: {data['total']} / 700", styles['Normal']))
+    elements.append(Paragraph(f"Total Marks: {data['total']} / 550", styles['Normal']))
     elements.append(Paragraph(f"SGPA: {data['sgpa']}", styles['Normal']))
     elements.append(Paragraph(f"Result: {data['result']}", styles['Normal']))
     elements.append(Paragraph(f"Performance: {data['performance']}", styles['Normal']))
@@ -117,7 +117,7 @@ if st.button("🚀 Generate Result & Predict", use_container_width=True):
         iot_total + oss_total + cc_total + bmp_total
     )
 
-    sgpa = round((total_marks / 700) * 10, 2)
+    sgpa = round((total_marks / 550) * 10, 2)
     result_status = "PASS" if total_marks >= 280 else "FAIL"
 
     # ---------------- ML INPUT (FIXED) ----------------
@@ -174,7 +174,7 @@ if st.button("🚀 Generate Result & Predict", use_container_width=True):
 
     </table>
 
-    <h3>Total Marks: {total_marks} / 700</h3>
+    <h3>Total Marks: {total_marks} / 550</h3>
     <h3>SGPA: {sgpa}</h3>
     <h3>Result: {result_status}</h3>
     <h3>Performance: {performance}</h3>
